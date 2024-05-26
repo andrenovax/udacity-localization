@@ -36,7 +36,7 @@ using namespace std;
 #include <pcl/registration/ndt.h>
 #include <pcl/console/time.h>   // TicToc
 
-const auto LOCALIZATION_METHOD = Icp;
+const auto LOCALIZATION_METHOD = Ndt;
 const double VOXEL_LEAF_SIZE = 0.1;
 
 PointCloudT pclCloud;
