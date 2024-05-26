@@ -3,16 +3,18 @@
 #include <pcl/registration/ndt.h>
 #include "helper.h"
 
-const double ICP_MAX_CORRESPONDENCE_DISTANCE = 2.0;
-const double ICP_TRANSFORMATION_EPSILON = 0.001;
-const double ICP_EUCLIDEAN_FITNESS_EPSILON = 0.5;
-const double ICP_RANSAC_OUTLIER_REJECTION_THRESHOLD = 10.0;
+const double ICP_NUMBER_OF_ITERATIONS = 50;
+const double ICP_MAX_CORRESPONDENCE_DISTANCE = 0;  // 2.0
+const double ICP_TRANSFORMATION_EPSILON = 0;  // 0.001
+const double ICP_EUCLIDEAN_FITNESS_EPSILON = 0;  // 0.5
+const double ICP_RANSAC_OUTLIER_REJECTION_THRESHOLD = 0;  // 10.0
 
+const double NDT_NUMBER_OF_ITERATIONS = 50;
 const double NDT_TRANSFORMATION_EPSILON = 0.001;
 const double NDT_RESOLUTION = 1.0;
 const double NDT_STEP_SIZE = 0.5;
 
-Eigen::Matrix4d ICP(PointCloudT::Ptr target, PointCloudT::Ptr source, Pose startingPose, int iterations){
+Eigen::Matrix4d ICP(PointCloudT::Ptr target, PointCloudT::Ptr source, Pose startingPose){
 	Eigen::Matrix4d transformation_matrix = Eigen::Matrix4d::Identity();
 
 	auto& rotation = startingPose.rotation;
@@ -28,10 +30,13 @@ Eigen::Matrix4d ICP(PointCloudT::Ptr target, PointCloudT::Ptr source, Pose start
 													starting_pose_transformation_matrix);
 
 	pcl::IterativeClosestPoint<PointT, PointT> icp;
-	icp.setMaximumIterations(iterations);
+	icp.setMaximumIterations(ICP_NUMBER_OF_ITERATIONS);
 	icp.setInputSource(source_transformed);
 	icp.setInputTarget(target);
-	icp.setMaxCorrespondenceDistance(2);
+
+	if (ICP_MAX_CORRESPONDENCE_DISTANCE > 0) {
+		icp.setMaxCorrespondenceDistance(ICP_MAX_CORRESPONDENCE_DISTANCE);
+	}
 
   if (ICP_TRANSFORMATION_EPSILON > 0) {
   	icp.setTransformationEpsilon(ICP_TRANSFORMATION_EPSILON);
@@ -55,7 +60,7 @@ Eigen::Matrix4d ICP(PointCloudT::Ptr target, PointCloudT::Ptr source, Pose start
 	return transformation_matrix;
 }
 
-Eigen::Matrix4d NDT(pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt, PointCloudT::Ptr source, Pose startingPose, int iterations){
+Eigen::Matrix4d NDT(pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt, PointCloudT::Ptr source, Pose startingPose){
 	auto& rotation = startingPose.rotation;
 	auto& position = startingPose.position;
 	Eigen::Matrix4f starting_pose_transformation_matrix = transform3D(
@@ -63,7 +68,7 @@ Eigen::Matrix4d NDT(pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointX
 		position.x, position.y, position.z
 	).cast<float>();
 
-	ndt.setMaximumIterations(iterations);
+	ndt.setMaximumIterations(NDT_NUMBER_OF_ITERATIONS);
 	ndt.setInputSource(source);
 
 	PointCloudT::Ptr cloud_ndt(new PointCloudT);
