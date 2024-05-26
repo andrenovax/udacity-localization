@@ -19,9 +19,9 @@ extern const double NDT_TRANSFORMATION_EPSILON;
 extern const double NDT_RESOLUTION;
 extern const double NDT_STEP_SIZE;
 
-Eigen::Matrix4d ICP(PointCloudT::Ptr target, PointCloudT::Ptr source, Pose startingPose, int iterations);
+Eigen::Matrix4d ICP(PointCloudT::Ptr target, PointCloudT::Ptr source, Pose startingPose);
 
-Eigen::Matrix4d NDT(pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt, PointCloudT::Ptr source, Pose startingPose, int iterations);
+Eigen::Matrix4d NDT(pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt, PointCloudT::Ptr source, Pose startingPose);
 
 pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> initializeNDT(PointCloudT::Ptr target);
 
