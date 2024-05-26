@@ -36,7 +36,7 @@ using namespace std;
 #include <pcl/registration/ndt.h>
 #include <pcl/console/time.h>   // TicToc
 
-const auto LOCALIZATION_METHOD Ndt;
+const auto LOCALIZATION_METHOD = Ndt;
 
 PointCloudT pclCloud;
 cc::Vehicle::Control control;

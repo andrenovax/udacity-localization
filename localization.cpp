@@ -41,8 +41,8 @@ Eigen::Matrix4d ICP(PointCloudT::Ptr target, PointCloudT::Ptr source, Pose start
   	icp.setEuclideanFitnessEpsilon(ICP_EUCLIDEAN_FITNESS_EPSILON);
   }
 
-  if (ICP_RANSA_OUTLIER_REJECTION_THRESHOLD > 0) {
-  	icp.setRANSACOutlierRejectionThreshold(ICP_RANSA_OUTLIER_REJECTION_THRESHOLD);
+  if (ICP_RANSAC_OUTLIER_REJECTION_THRESHOLD > 0) {
+  	icp.setRANSACOutlierRejectionThreshold(ICP_RANSAC_OUTLIER_REJECTION_THRESHOLD);
   }
 
 	PointCloudT::Ptr cloud_icp(new PointCloudT);
